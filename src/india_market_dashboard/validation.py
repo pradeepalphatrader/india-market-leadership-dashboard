@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from datetime import date
 from .config import Settings
 from .models import Classification, PriceBar, StockResult
@@ -15,6 +16,9 @@ def validate_release(
         checks.append({"name": name, "passed": bool(passed), "detail": detail})
 
     latest = max((bar.trade_date for bar in bars), default=date.min)
+    session_counts = Counter(bar.trade_date for bar in bars)
+    latest_session_symbols = session_counts.get(latest, 0)
+    latest_session_coverage = latest_session_symbols / max(expected_universe or diagnostics.get("input_symbols", 0), 1)
     input_symbols = diagnostics.get("input_symbols", 0)
     classification_coverage = len({bar.symbol for bar in bars} & set(classifications)) / max(input_symbols, 1)
     universe_coverage = len(results) / max(expected_universe or input_symbols, 1)
@@ -26,6 +30,7 @@ def validate_release(
     check("Price data present", bool(bars), f"{len(bars):,} price rows")
     check("Eligible universe present", bool(results), f"{len(results):,} eligible stocks")
     check("Fresh data", (as_of - latest).days <= settings.freshness_days, f"Latest session: {latest.isoformat()}")
+    check("Complete market session", latest_session_coverage >= settings.minimum_universe_coverage, f"{latest_session_symbols} symbols · {latest_session_coverage:.1%}")
     check("Classification coverage", classification_coverage >= settings.minimum_classification_coverage, f"{classification_coverage:.1%}")
     check("Four-level hierarchy coverage", hierarchy_coverage >= settings.minimum_classification_coverage, f"{hierarchy_coverage:.1%}")
     check("Universe coverage", universe_coverage >= settings.minimum_universe_coverage, f"{universe_coverage:.1%}")

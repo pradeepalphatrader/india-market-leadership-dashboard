@@ -145,7 +145,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="data/input")
     parser.add_argument("--workers", type=int, default=10)
-    parser.add_argument("--history-days", type=int, default=430)
+    parser.add_argument(
+        "--history-days", type=int, default=2200,
+        help="Calendar days to request; 2200 provides roughly five usable years after the 200-session warm-up.",
+    )
     args = parser.parse_args()
     output = Path(args.output)
     history_dir = output / "history"

@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import json
 import shutil
-from collections import defaultdict
+from collections import Counter
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -11,6 +11,7 @@ from .analysis import analyze_stocks
 from .breadth import build_breadth
 from .config import load_settings
 from .data import read_classifications, read_history
+from .history import build_historical_breadth
 from .validation import validate_release
 
 
@@ -31,19 +32,34 @@ def _write_csv(path: Path, rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
+def _latest_complete_session(bars: list, expected_universe: int, minimum_coverage: float) -> date:
+    counts = Counter(bar.trade_date for bar in bars)
+    if not counts:
+        raise ValueError("Cannot select a completed session from empty price history")
+    observed_capacity = max(counts.values())
+    denominator = expected_universe or observed_capacity
+    required = min(observed_capacity, max(1, int(denominator * minimum_coverage)))
+    complete = [session for session, count in counts.items() if count >= required]
+    if not complete:
+        raise ValueError(f"No market session meets the required coverage of {required} symbols")
+    return max(complete)
+
+
 def run_pipeline(project_root: str | Path, history_dir: str | Path, classification_file: str | Path, demo: bool = False) -> dict:
     root = Path(project_root)
     settings = load_settings(root / "config/settings.json")
     bars = read_history(history_dir)
     classifications = read_classifications(classification_file)
-    results, diagnostics = analyze_stocks(bars, classifications, settings)
-    breadth = build_breadth(results)
-    latest_session = max(bar.trade_date for bar in bars)
     manifest_path = Path(history_dir).parent / "manifest.json"
     source_manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+    expected_universe = int(source_manifest.get("constituent_count", 0))
+    latest_session = _latest_complete_session(bars, expected_universe, settings.minimum_universe_coverage)
+    bars = [bar for bar in bars if bar.trade_date <= latest_session]
+    results, diagnostics = analyze_stocks(bars, classifications, settings)
+    breadth = build_breadth(results)
     quality = validate_release(
         bars, classifications, results, diagnostics, settings, date.today(), demo=demo,
-        expected_universe=int(source_manifest.get("constituent_count", 0)),
+        expected_universe=expected_universe,
     )
 
     stock_rows = [item.to_dict() for item in results]
@@ -60,6 +76,10 @@ def run_pipeline(project_root: str | Path, history_dir: str | Path, classificati
     }
     output = root / "site/data"
     _write_json(output / "dashboard.json", dashboard)
+    _write_json(
+        output / "history.json",
+        build_historical_breadth(bars, classifications, settings, expected_universe=expected_universe),
+    )
     _write_json(output / "methodology.json", {"settings": settings.__dict__, "definitions": {
         "momentum_leader": "Top configured percentile of blended 1/3/6-month momentum with price above 50 DMA above 200 DMA.",
         "non_extended_leader": "A Momentum Leader within the configured ATR extension limit from its 50-day average.",

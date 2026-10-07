@@ -29,7 +29,7 @@ jobs:
           key: nse-production-input-${{ github.run_id }}
           restore-keys: nse-production-input-
       - name: Refresh production inputs
-        run: python scripts/refresh_production_data.py --output data/input
+        run: python scripts/refresh_production_data.py --output data/input --history-days 2200
       - name: Build and validate production dashboard
         run: PYTHONPATH=src python -m india_market_dashboard.cli build --history-dir data/input/history --classification-file data/input/classifications.csv
       - name: Run tests

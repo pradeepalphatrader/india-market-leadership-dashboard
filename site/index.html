@@ -16,6 +16,7 @@
     </a>
     <nav id="primary-nav" aria-label="Primary navigation">
       <a href="#overview" data-view="overview">Overview</a>
+      <a href="#cycles" data-view="cycles">Market Cycles</a>
       <a href="#leadership" data-view="leadership">Leadership</a>
       <a href="#sectors" data-view="sectors">Sectors</a>
       <a href="#health" data-view="health">Data Health</a>
@@ -47,6 +48,28 @@
         <article class="panel span-5"><div class="section-heading"><div><p class="eyebrow">MARKET FLOW</p><h2>Advances vs declines</h2></div></div><div id="advance-chart" class="donut-layout"></div></article>
         <article class="panel span-12"><div class="section-heading"><div><p class="eyebrow">ROTATION</p><h2>Macro-sector heatmap</h2></div><a href="#sectors" class="text-link">Explore all levels →</a></div><div id="macro-heatmap" class="heatmap"></div></article>
       </div>
+    </section>
+
+    <section id="cycles" class="view hidden">
+      <div class="page-heading cycles-heading"><div><p class="eyebrow">HISTORICAL PARTICIPATION</p><h1>Read the cycle beneath<br><span>the market.</span></h1></div><p>Compare the current-universe equal-weight market proxy with participation, leadership, and sector breadth through time.</p></div>
+      <div id="history-notice" class="history-notice panel"></div>
+      <div class="cycle-toolbar panel">
+        <div id="cycle-ranges" class="segmented"></div>
+        <label>Compare metric<select id="cycle-metric" aria-label="Select historical breadth metric"></select></label>
+      </div>
+      <article class="panel cycle-panel">
+        <div class="section-heading"><div><p class="eyebrow">MARKET COMPARISON</p><h2>Equal-weight proxy vs breadth</h2></div><span id="cycle-range-label" class="muted"></span></div>
+        <div id="market-history-chart" class="history-chart"></div>
+        <div id="breadth-history-chart" class="history-chart"></div>
+        <div id="cycle-legend" class="chart-legend"></div>
+      </article>
+      <article class="panel cycle-panel">
+        <div class="section-heading"><div><p class="eyebrow">SECTOR ROTATION</p><h2>Macro-sector breadth comparison</h2></div><span class="muted">Choose up to four</span></div>
+        <div id="sector-history-controls" class="sector-history-controls"></div>
+        <div id="sector-history-chart" class="history-chart tall"></div>
+        <div id="sector-history-legend" class="chart-legend"></div>
+      </article>
+      <article class="panel cycle-explainer"><strong>How to interpret divergence</strong><p>Index proxy rising while breadth falls can warn that fewer stocks are supporting the move. Proxy falling while breadth improves can signal internal repair. Divergence is context—not a standalone buy or sell signal.</p></article>
     </section>
 
     <section id="leadership" class="view hidden">

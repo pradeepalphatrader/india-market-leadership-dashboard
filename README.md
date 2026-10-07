@@ -11,6 +11,7 @@ A transparent, end-of-day NSE research dashboard for market participation, momen
 - A zero-paid-API historical-price fallback with explicit source metadata.
 - Liquidity/history eligibility checks, 20/50/200-day averages, ATR%, range contraction, volatility, and blended 1/3/6-month momentum.
 - Market, sector, industry, and basic-industry breadth.
+- Five-year usable historical breadth after a 200-session warm-up, including a current-universe equal-weight market proxy, A/D line, leadership counts, highs/lows, coverage, and macro-sector rotation comparisons.
 - Momentum Leaders, Non-Extended Leaders, Tight Setups, Emerging Leaders, and Weakening Leaders.
 - Explainable stock qualification reasons, searchable/sortable tables, CSV export, dark/light themes, and responsive layouts.
 - A hard release gate: demo, stale, partial, or insufficiently classified data cannot deploy.
@@ -37,7 +38,7 @@ The demo exercises the whole product but deliberately fails the production relea
 ## Production refresh
 
 ```bash
-python scripts/refresh_production_data.py --output data/input
+python scripts/refresh_production_data.py --output data/input --history-days 2200
 python -m india_market_dashboard.cli build \
   --history-dir data/input/history \
   --classification-file data/input/classifications.csv
@@ -45,6 +46,8 @@ python -m india_market_dashboard.cli publish --destination build
 ```
 
 `publish` refuses to stage the site unless every release check passes.
+
+The historical page is explicitly labelled **Current-Universe Reconstructed Breadth**. It applies today's constituent list to historical prices and therefore contains survivorship bias; it is not point-in-time Nifty 500 membership history. Daily snapshots generated from deployment onward preserve the observed universe for progressively stronger future research.
 
 ## Tests
 
