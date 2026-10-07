@@ -1,0 +1,27 @@
+{
+  "settings": {
+    "rules_version": "1.0.0",
+    "universe_name": "Nifty 500",
+    "allowed_series": [
+      "EQ",
+      "BE",
+      "BZ"
+    ],
+    "minimum_history_sessions": 200,
+    "minimum_price_inr": 20.0,
+    "minimum_median_traded_value_inr": 20000000.0,
+    "momentum_percentile": 0.1,
+    "maximum_extension_atr_multiples": 4.0,
+    "tight_setup_max_20_day_range_percent": 15.0,
+    "tight_setup_max_20_day_volatility_percent": 4.0,
+    "freshness_days": 5,
+    "minimum_classification_coverage": 0.95,
+    "minimum_universe_coverage": 0.9
+  },
+  "definitions": {
+    "momentum_leader": "Top configured percentile of blended 1/3/6-month momentum with price above 50 DMA above 200 DMA.",
+    "non_extended_leader": "A Momentum Leader within the configured ATR extension limit from its 50-day average.",
+    "tight_setup": "A Non-Extended Leader whose 20-session range and daily-return volatility are within configured limits.",
+    "breadth_score": "Weighted participation above 20/50/200-day moving averages (25%/35%/40%)."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "rules_version": "1.0.0",
+  "universe_name": "Nifty 500",
+  "allowed_series": ["EQ", "BE", "BZ"],
+  "minimum_history_sessions": 200,
+  "minimum_price_inr": 20.0,
+  "minimum_median_traded_value_inr": 20000000.0,
+  "momentum_percentile": 0.10,
+  "maximum_extension_atr_multiples": 4.0,
+  "tight_setup_max_20_day_range_percent": 15.0,
+  "tight_setup_max_20_day_volatility_percent": 4.0,
+  "freshness_days": 5,
+  "minimum_classification_coverage": 0.95,
+  "minimum_universe_coverage": 0.90
+}

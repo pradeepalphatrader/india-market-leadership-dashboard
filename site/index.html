@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="India Market Leadership & Breadth — transparent NSE end-of-day participation and leadership research.">
+  <title>India Market Leadership & Breadth</title>
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="Dashboard home">
+      <span class="brand-mark" aria-hidden="true">IM</span>
+      <span><strong>India Market</strong><small>Leadership & Breadth</small></span>
+    </a>
+    <nav id="primary-nav" aria-label="Primary navigation">
+      <a href="#overview" data-view="overview">Overview</a>
+      <a href="#leadership" data-view="leadership">Leadership</a>
+      <a href="#sectors" data-view="sectors">Sectors</a>
+      <a href="#health" data-view="health">Data Health</a>
+      <a href="#methodology" data-view="methodology">Methodology</a>
+    </nav>
+    <div class="top-actions">
+      <span id="mode-badge" class="badge">Loading</span>
+      <button id="theme-toggle" class="icon-button" aria-label="Toggle light and dark theme">◐</button>
+      <button id="menu-toggle" class="icon-button menu-button" aria-label="Open navigation">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="loading" class="loading-state"><div class="loader"></div><p>Loading validated market data…</p></section>
+    <section id="error-state" class="error-state hidden"><strong>Dashboard data is unavailable.</strong><p id="error-message"></p></section>
+
+    <section id="overview" class="view hidden">
+      <div class="hero">
+        <div><p class="eyebrow">NSE END-OF-DAY RESEARCH</p><h1>See the market beneath<br><span>the headline index.</span></h1><p class="hero-copy">Participation, leadership, and setup quality across the complete NSE classification hierarchy.</p></div>
+        <div class="market-pulse panel">
+          <div class="pulse-ring"><span id="pulse-score">—</span><small>Breadth</small></div>
+          <div><span class="muted">Market condition</span><h2 id="market-status">—</h2><p id="as-of">As of —</p></div>
+        </div>
+      </div>
+      <div id="quality-banner" class="quality-banner"></div>
+      <div id="summary-cards" class="metric-grid"></div>
+      <div class="dashboard-grid">
+        <article class="panel span-7"><div class="section-heading"><div><p class="eyebrow">PARTICIPATION</p><h2>Moving-average breadth</h2></div><span class="muted">Equal-weight universe</span></div><div id="breadth-bars" class="breadth-bars"></div></article>
+        <article class="panel span-5"><div class="section-heading"><div><p class="eyebrow">MARKET FLOW</p><h2>Advances vs declines</h2></div></div><div id="advance-chart" class="donut-layout"></div></article>
+        <article class="panel span-12"><div class="section-heading"><div><p class="eyebrow">ROTATION</p><h2>Macro-sector heatmap</h2></div><a href="#sectors" class="text-link">Explore all levels →</a></div><div id="macro-heatmap" class="heatmap"></div></article>
+      </div>
+    </section>
+
+    <section id="leadership" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">STOCK LEADERSHIP</p><h1>Qualified opportunities,<br><span>with reasons.</span></h1></div><p>Transparent mechanical screening—not investment advice. Select a setup, search, sort, inspect, and export.</p></div>
+      <div class="toolbar panel">
+        <div id="scanner-tabs" class="segmented"></div>
+        <label class="search"><span>⌕</span><input id="stock-search" type="search" placeholder="Search symbol, company, sector…"></label>
+        <select id="sector-filter" aria-label="Filter by sector"><option value="">All sectors</option></select>
+        <button id="export-button" class="primary-button">Export CSV</button>
+      </div>
+      <div class="table-shell panel"><div class="table-meta"><span id="table-count">0 stocks</span><span class="muted">Click a row for its qualification explanation</span></div><div class="table-scroll"><table><thead><tr><th data-sort="symbol">Symbol</th><th data-sort="close">Price</th><th data-sort="daily_change_percent">Day</th><th data-sort="momentum_score">Momentum</th><th data-sort="return_3_month_percent">3M</th><th data-sort="extension_atr_multiples">Extension</th><th data-sort="sector">Sector</th></tr></thead><tbody id="stock-table"></tbody></table></div></div>
+    </section>
+
+    <section id="sectors" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">FULL NSE HIERARCHY</p><h1>From macro sectors<br><span>to basic industries.</span></h1></div><p>Explore participation at every classification level. Rankings are equal-weight to prevent a handful of large stocks from hiding weak breadth.</p></div>
+      <div id="group-tabs" class="segmented large"></div>
+      <div id="group-grid" class="group-grid"></div>
+    </section>
+
+    <section id="health" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">RELEASE GATE</p><h1>Trust starts with<br><span>visible data quality.</span></h1></div><p>The production site deploys only when every required freshness, coverage, uniqueness, and non-demo check passes.</p></div>
+      <div id="health-summary" class="health-summary panel"></div><div id="health-checks" class="checks-grid"></div>
+    </section>
+
+    <section id="methodology" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">METHODOLOGY</p><h1>Mechanical rules,<br><span>plain-language definitions.</span></h1></div><p>Every classification, threshold, and calculation is versioned so the same input produces the same result.</p></div>
+      <div id="methodology-content" class="method-grid"></div>
+      <article class="panel disclaimer"><strong>Educational use only</strong><p>This dashboard is a research tool, not investment advice or a recommendation to buy or sell securities. Verify data independently before making decisions.</p></article>
+    </section>
+  </main>
+
+  <dialog id="stock-dialog"><button id="dialog-close" class="dialog-close" aria-label="Close">×</button><div id="dialog-content"></div></dialog>
+  <footer><span>India Market Leadership & Breadth</span><span id="footer-meta">Rules — · Updated —</span></footer>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

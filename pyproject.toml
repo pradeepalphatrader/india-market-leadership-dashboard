@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "india-market-leadership-dashboard"
+version = "1.0.0"
+description = "Validated NSE market leadership and breadth dashboard"
+requires-python = ">=3.10"
+dependencies = ["certifi>=2024.2.2"]
+
+[project.scripts]
+india-market-dashboard = "india_market_dashboard.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

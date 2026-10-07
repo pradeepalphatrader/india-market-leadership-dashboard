@@ -1,0 +1,52 @@
+name: Build validated dashboard and deploy Pages
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 14 * * 1-5"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Restore production input cache
+        uses: actions/cache@v4
+        with:
+          path: data/input
+          key: nse-production-input-${{ github.run_id }}
+          restore-keys: nse-production-input-
+      - name: Refresh production inputs
+        run: python scripts/refresh_production_data.py --output data/input
+      - name: Build and validate production dashboard
+        run: PYTHONPATH=src python -m india_market_dashboard.cli build --history-dir data/input/history --classification-file data/input/classifications.csv
+      - name: Run tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
+      - name: Enforce release gate and stage site
+        run: PYTHONPATH=src python -m india_market_dashboard.cli publish --destination build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy validated artifact only
+        id: deployment
+        uses: actions/deploy-pages@v4
