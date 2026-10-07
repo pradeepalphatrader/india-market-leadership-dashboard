@@ -36,6 +36,8 @@ jobs:
         run: python scripts/refresh_production_data.py --output data/input --history-days 2200
       - name: Build and validate production dashboard
         run: PYTHONPATH=src python -m india_market_dashboard.cli build --history-dir data/input/history --classification-file data/input/classifications.csv
+      - name: Generate deterministic test fixtures
+        run: python scripts/generate_demo_data.py
       - name: Run tests
         run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
       - name: Compare with current live dashboard
