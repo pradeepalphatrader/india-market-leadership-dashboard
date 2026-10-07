@@ -16,6 +16,7 @@ A transparent, end-of-day NSE research dashboard for market participation, momen
 - Explainable stock qualification reasons, searchable/sortable tables, CSV export, dark/light themes, and responsive layouts.
 - A hard release gate: demo, stale, partial, or insufficiently classified data cannot deploy.
 - Tests and a scheduled GitHub Pages workflow.
+- Smart weekday refresh attempts at 6:30 PM, 8:30 PM, and 10:30 PM IST; later retries skip deployment when the validated live result already matches.
 
 ## Quick start
 

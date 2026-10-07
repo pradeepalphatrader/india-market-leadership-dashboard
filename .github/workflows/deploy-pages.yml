@@ -3,7 +3,9 @@ name: Build validated dashboard and deploy Pages
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 14 * * 1-5"
+    # 6:30 PM, 8:30 PM, and 10:30 PM India time. Later runs act as
+    # completeness retries; identical validated builds are not redeployed.
+    - cron: "0 13,15,17 * * 1-5"
 
 permissions:
   contents: read
@@ -17,6 +19,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.deployment-check.outputs.deploy }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -34,10 +38,16 @@ jobs:
         run: PYTHONPATH=src python -m india_market_dashboard.cli build --history-dir data/input/history --classification-file data/input/classifications.csv
       - name: Run tests
         run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
+      - name: Compare with current live dashboard
+        id: deployment-check
+        run: python scripts/check_deployment_needed.py
       - name: Enforce release gate and stage site
+        if: steps.deployment-check.outputs.deploy == 'true'
         run: PYTHONPATH=src python -m india_market_dashboard.cli publish --destination build
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - if: steps.deployment-check.outputs.deploy == 'true'
+        uses: actions/configure-pages@v5
+      - if: steps.deployment-check.outputs.deploy == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: build
   deploy:
@@ -46,6 +56,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    if: needs.build.outputs.deploy == 'true'
     steps:
       - name: Deploy validated artifact only
         id: deployment
