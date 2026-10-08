@@ -13,6 +13,7 @@ A transparent, end-of-day NSE research dashboard for market participation, momen
 - Market, sector, industry, and basic-industry breadth.
 - Five-year usable historical breadth after a 200-session warm-up, including a current-universe equal-weight market proxy, A/D line, leadership counts, highs/lows, coverage, and macro-sector rotation comparisons.
 - Ten explainable opportunity views: Momentum, Non-Extended, Tight, Breakout, Recovery, Contrarian Quality, Emerging, Weakening, 65 DMA, and 200 DMA.
+- A separate sortable 13-scanner workspace preserving the original VPK fundamental, catalyst, strength, tightness, and momentum rule families for NSE stocks.
 - 1–99 relative-strength rank against the eligible Nifty 500 universe proxy.
 - Universal ticker search, clickable underlying lists, Market X-Ray, Ticker 360 with an inline TradingView chart, TradingView watchlist copy, browser-local watchlists and dated notes.
 - Searchable/sortable tables, CSV export, dark/light themes, and responsive layouts.

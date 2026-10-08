@@ -20,6 +20,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from tradingview_screener import Query, col
+
 CONSTITUENTS_URL = "https://www.niftyindices.com/IndexConstituent/ind_nifty500list.csv"
 HIERARCHY_BASE = "https://liveindexsa.niftyindices.com/jsonfiles"
 LEVELS = {
@@ -34,6 +36,27 @@ try:
     SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 except ImportError:
     SSL_CONTEXT = ssl.create_default_context()
+
+TRADINGVIEW_FIELDS = [
+    "name", "exchange", "close", "change", "volume", "market_cap_basic",
+    "average_volume_60d_calc", "float_shares_outstanding", "price_52_week_low",
+    "SMA10", "EMA5", "SMA20", "SMA50", "Volatility.M", "Perf.W", "Perf.1M",
+    "Perf.3M", "Perf.6M", "relative_volume_10d_calc", "gap",
+    "earnings_per_share_diluted_yoy_growth_fq", "free_cash_flow_yoy_growth_ttm",
+    "total_revenue_yoy_growth_fq",
+]
+
+
+def refresh_tradingview_snapshot(output: Path, symbols: set[str]) -> int:
+    _, frame = (
+        Query().set_markets("india").select(*TRADINGVIEW_FIELDS)
+        .where(col("type") == "stock", col("exchange") == "NSE").limit(10_000)
+        .get_scanner_data()
+    )
+    frame["name"] = frame["name"].astype(str).str.upper().str.strip()
+    frame = frame[frame["name"].isin(symbols)].drop_duplicates("name").sort_values("name")
+    frame.to_csv(output / "tradingview_snapshot.csv", index=False)
+    return len(frame)
 
 
 def fetch(url: str, attempts: int = 3) -> bytes:
@@ -172,6 +195,8 @@ def main() -> None:
     with (output / "classifications.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=classifications[0].keys(), lineterminator="\n");writer.writeheader();writer.writerows(classifications)
 
+    tradingview_count = refresh_tradingview_snapshot(output, set(constituents))
+
     start, end = date.today() - timedelta(days=args.history_days), date.today()
     price_rows, failures = [], []
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
@@ -199,6 +224,7 @@ def main() -> None:
         "classification_date": max(classification_dates),
         "price_source": "Yahoo Finance public chart endpoint (fallback)",
         "constituent_count": len(constituents), "price_symbol_count": len({row['symbol'] for row in price_rows}),
+        "tradingview_snapshot_count": tradingview_count,
         "missing_hierarchy_symbols": missing_hierarchy, "price_failures": failures,
     }
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")

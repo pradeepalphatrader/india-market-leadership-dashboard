@@ -28,6 +28,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install project dependencies
+        run: python -m pip install -e .
       - name: Restore production input cache
         uses: actions/cache@v4
         with:

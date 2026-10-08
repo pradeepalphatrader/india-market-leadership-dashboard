@@ -78,9 +78,14 @@ class StockResult:
     near_sma_65: bool = False
     near_sma_200: bool = False
     opportunity_type: str = "Monitor"
+    vpk_scans: list[str] | None = None
+    vpk_scan_count: int = 0
+    vpk_metrics: dict | None = None
     reasons: list[str] | None = None
 
     def to_dict(self) -> dict:
         payload = asdict(self)
         payload["reasons"] = self.reasons or []
+        payload["vpk_scans"] = self.vpk_scans or []
+        payload["vpk_metrics"] = self.vpk_metrics or {}
         return payload

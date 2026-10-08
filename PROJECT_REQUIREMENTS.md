@@ -12,6 +12,7 @@ Build one validated, end-to-end NSE end-of-day research dashboard and publish it
 - Market command centre: clickable breadth counts, 52-week range context, market story, and exact underlying stock lists.
 - Approximately five usable years of current-universe reconstructed breadth after a 200-session warm-up, with explicit coverage, survivorship-bias disclosure, market-proxy comparison, leadership history, and macro-sector rotation charts.
 - Scanners: Momentum, Non-Extended, Tight, Emerging, Weakening, Breakout, Recovery, Contrarian Quality, 65 DMA, and 200 DMA setups.
+- Preserve the original 13 VPK scanner intents as a separate India-adapted workspace: Fundamental Growth, Post-Earnings Continuation, two Strongest Stock groups, Daily Tightness, and eight size/timeframe momentum scans. ₹ market-cap equivalents use a versioned reference rate; all exact rules and zero-result states remain visible.
 - Ticker 360: price; 1W/1M/3M/6M/12M performance; 20/50/65/200 DMA; ATR/ADR; 52-week range; 1–99 relative-strength rank versus the eligible Nifty 500 proxy; full NSE hierarchy.
 - Universal search across every eligible stock, including stocks outside the selected scanner.
 - Inline TradingView chart with weekly default, daily toggle, chart-type controls, and no forced external tab.

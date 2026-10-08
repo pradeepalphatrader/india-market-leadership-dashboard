@@ -18,6 +18,7 @@
       <a href="#overview" data-view="overview">Overview</a>
       <a href="#cycles" data-view="cycles">Market Cycles</a>
       <a href="#leadership" data-view="leadership">Leadership</a>
+      <a href="#vpk-scanners" data-view="vpk-scanners">13 Scanners</a>
       <a href="#sectors" data-view="sectors">Sectors</a>
       <a href="#research" data-view="research">Watchlist</a>
       <a href="#health" data-view="health">Data Health</a>
@@ -92,6 +93,13 @@
       <div id="group-tabs" class="segmented large"></div>
       <div class="table-shell panel xray-shell"><div class="table-meta"><strong>Market X-Ray</strong><span class="muted">Click any row to see its stocks</span></div><div class="table-scroll"><table class="xray-table"><thead><tr><th>Group</th><th>State</th><th>Breadth</th><th>&gt;50 DMA</th><th>&gt;200 DMA</th><th>Median 3M</th><th>Leaders</th><th>New Highs</th></tr></thead><tbody id="xray-table"></tbody></table></div></div>
       <div id="group-grid" class="group-grid"></div>
+    </section>
+
+    <section id="vpk-scanners" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">US RULES · INDIA UNIVERSE</p><h1>Thirteen precise scanners,<br><span>one NSE workspace.</span></h1></div><p>Original rule intent preserved with transparent ₹ market-cap equivalents. Zero results means no stock qualified—not missing data.</p></div>
+      <div class="toolbar panel scanner-sortbar"><select id="vpk-category"><option value="">All scanner families</option></select><select id="vpk-sort"><option value="relative_strength_rating">Sort: RS rating</option><option value="daily_change_percent">Sort: Day performance</option><option value="return_1_week_percent">Sort: 1-week performance</option><option value="return_1_month_percent">Sort: 1-month performance</option><option value="return_3_month_percent">Sort: 3-month performance</option><option value="return_6_month_percent">Sort: 6-month performance</option><option value="vpk_scan_count">Sort: Scanner overlap</option><option value="position_52_week_percent">Sort: 52W position</option><option value="symbol">Sort: Ticker A–Z</option></select><button id="vpk-direction" class="quiet-button">Descending ↓</button></div>
+      <div id="vpk-scanner-cards" class="scanner-card-grid"></div>
+      <div id="vpk-results"></div>
     </section>
 
     <section id="research" class="view hidden">

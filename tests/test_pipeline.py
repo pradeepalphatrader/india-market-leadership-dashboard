@@ -35,6 +35,9 @@ class PipelineTests(unittest.TestCase):
                 self.assertIn(field, sample)
             self.assertTrue(1 <= sample["relative_strength_rating"] <= 99)
             self.assertIn("above_sma_65_percent", dashboard["market"])
+            self.assertEqual(13, len(dashboard["scanner_catalog"]))
+            self.assertEqual(13, len(dashboard["scanner_results"]))
+            self.assertIn("vpk_scans", sample)
             self.assertEqual(len(dashboard["groups"]["macro_sectors"]), 12)
             self.assertFalse(dashboard["metadata"]["publishable"])
             self.assertEqual(history["method"], "current_universe_reconstructed")
@@ -62,7 +65,7 @@ class PipelineTests(unittest.TestCase):
     def test_site_exposes_intelligence_workflow(self):
         html = (self.root / "site/index.html").read_text(encoding="utf-8")
         javascript = (self.root / "site/assets/app.js").read_text(encoding="utf-8")
-        for phrase in ("Market X-Ray", "Copy TradingView", "Daily market journal", "global-search"):
+        for phrase in ("Market X-Ray", "Copy TradingView", "Daily market journal", "global-search", "Thirteen precise scanners"):
             self.assertIn(phrase, html)
         for phrase in ("relative_strength_rating", "near_sma_65", "Interactive price chart", "showList"):
             self.assertIn(phrase, javascript)

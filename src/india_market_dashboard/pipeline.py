@@ -13,6 +13,7 @@ from .config import load_settings
 from .data import read_classifications, read_history
 from .history import build_historical_breadth
 from .validation import validate_release
+from .vpk_scanners import CATALOG, apply_vpk_scanners, read_snapshot
 
 
 def _write_json(path: Path, payload: object) -> None:
@@ -89,11 +90,21 @@ def run_pipeline(project_root: str | Path, history_dir: str | Path, classificati
     latest_session = _latest_complete_session(bars, expected_universe, settings.minimum_universe_coverage)
     bars = [bar for bar in bars if bar.trade_date <= latest_session]
     results, diagnostics = analyze_stocks(bars, classifications, settings)
+    scanner_snapshot = read_snapshot(Path(history_dir).parent / "tradingview_snapshot.csv")
+    scanner_results = apply_vpk_scanners(results, scanner_snapshot)
+    diagnostics["tradingview_scanner_snapshot_symbols"] = len(scanner_snapshot)
     breadth = build_breadth(results)
     quality = validate_release(
         bars, classifications, results, diagnostics, settings, date.today(), demo=demo,
         expected_universe=expected_universe,
     )
+    scanner_coverage = len(scanner_snapshot) / max(expected_universe or len(classifications), 1)
+    scanner_check = {
+        "name": "13-scanner source coverage", "passed": scanner_coverage >= settings.minimum_universe_coverage,
+        "detail": f"{len(scanner_snapshot)} symbols · {scanner_coverage:.1%}",
+    }
+    quality["checks"].append(scanner_check)
+    quality["publishable"] = quality["publishable"] and scanner_check["passed"]
 
     stock_rows = [item.to_dict() for item in results]
     generated_at = datetime.now(timezone.utc).isoformat()
@@ -105,7 +116,8 @@ def run_pipeline(project_root: str | Path, history_dir: str | Path, classificati
             "publishable": quality["publishable"], "data_sources": source_manifest,
         },
         "market": breadth["market"], "groups": {key: value for key, value in breadth.items() if key != "market"},
-        "stocks": stock_rows, "data_quality": quality, "diagnostics": diagnostics,
+        "stocks": stock_rows, "scanner_catalog": CATALOG, "scanner_results": scanner_results,
+        "data_quality": quality, "diagnostics": diagnostics,
     }
     output = root / "site/data"
     _write_json(output / "dashboard.json", dashboard)
