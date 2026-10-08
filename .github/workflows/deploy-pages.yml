@@ -1,6 +1,8 @@
 name: Build validated dashboard and deploy Pages
 
 on:
+  push:
+    branches: ["main"]
   workflow_dispatch:
   schedule:
     # 6:30 PM, 8:30 PM, and 10:30 PM India time. Later runs act as
