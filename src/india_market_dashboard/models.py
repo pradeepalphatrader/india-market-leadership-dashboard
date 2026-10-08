@@ -37,20 +37,31 @@ class StockResult:
     basic_industry: str
     close: float
     daily_change_percent: float
+    return_1_week_percent: float
     return_1_month_percent: float
     return_3_month_percent: float
     return_6_month_percent: float
+    return_12_month_percent: float
     sma_20: float
     sma_50: float
+    sma_65: float
     sma_200: float
     above_sma_20: bool
     above_sma_50: bool
+    above_sma_65: bool
     above_sma_200: bool
     atr_percent: float
+    adr_percent: float
     extension_atr_multiples: float
     range_20_day_percent: float
     volatility_20_day_percent: float
     median_traded_value_inr: float
+    high_52_week: float = 0.0
+    low_52_week: float = 0.0
+    position_52_week_percent: float = 0.0
+    distance_from_52_week_high_percent: float = 0.0
+    relative_strength_score: float = 0.0
+    relative_strength_rating: int = 0
     new_20_day_high: bool = False
     new_20_day_low: bool = False
     new_52_week_high: bool = False
@@ -61,6 +72,12 @@ class StockResult:
     tight_setup: bool = False
     emerging_leader: bool = False
     weakening_leader: bool = False
+    recovery_candidate: bool = False
+    contrarian_quality: bool = False
+    breakout_candidate: bool = False
+    near_sma_65: bool = False
+    near_sma_200: bool = False
+    opportunity_type: str = "Monitor"
     reasons: list[str] | None = None
 
     def to_dict(self) -> dict:

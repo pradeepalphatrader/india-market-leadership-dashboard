@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="India Market Leadership & Breadth — transparent NSE end-of-day participation and leadership research.">
-  <title>India Market Leadership & Breadth</title>
+  <meta name="description" content="India Market Intelligence — focused NSE breadth, sector rotation, scanners and Ticker 360 research.">
+  <title>India Market Intelligence</title>
   <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
@@ -12,17 +12,19 @@
   <header class="topbar">
     <a class="brand" href="#overview" aria-label="Dashboard home">
       <span class="brand-mark" aria-hidden="true">IM</span>
-      <span><strong>India Market</strong><small>Leadership & Breadth</small></span>
+      <span><strong>India Market</strong><small>Intelligence</small></span>
     </a>
     <nav id="primary-nav" aria-label="Primary navigation">
       <a href="#overview" data-view="overview">Overview</a>
       <a href="#cycles" data-view="cycles">Market Cycles</a>
       <a href="#leadership" data-view="leadership">Leadership</a>
       <a href="#sectors" data-view="sectors">Sectors</a>
+      <a href="#research" data-view="research">Watchlist</a>
       <a href="#health" data-view="health">Data Health</a>
       <a href="#methodology" data-view="methodology">Methodology</a>
     </nav>
     <div class="top-actions">
+      <label class="global-search"><span>⌕</span><input id="global-search" type="search" autocomplete="off" placeholder="Search any Nifty 500 ticker"><div id="global-results" class="global-results hidden"></div></label>
       <span id="mode-badge" class="badge">Loading</span>
       <button id="theme-toggle" class="icon-button" aria-label="Toggle light and dark theme">◐</button>
       <button id="menu-toggle" class="icon-button menu-button" aria-label="Open navigation">☰</button>
@@ -35,7 +37,7 @@
 
     <section id="overview" class="view hidden">
       <div class="hero">
-        <div><p class="eyebrow">NSE END-OF-DAY RESEARCH</p><h1>See the market beneath<br><span>the headline index.</span></h1><p class="hero-copy">Participation, leadership, and setup quality across the complete NSE classification hierarchy.</p></div>
+        <div><p class="eyebrow">NSE END-OF-DAY COMMAND CENTRE</p><h1>See strength early.<br><span>Ignore the noise.</span></h1><p class="hero-copy">Market health, sector rotation and explainable stock opportunities—from one focused 360° view.</p></div>
         <div class="market-pulse panel">
           <div class="pulse-ring"><span id="pulse-score">—</span><small>Breadth</small></div>
           <div><span class="muted">Market condition</span><h2 id="market-status">—</h2><p id="as-of">As of —</p></div>
@@ -43,10 +45,12 @@
       </div>
       <div id="quality-banner" class="quality-banner"></div>
       <div id="summary-cards" class="metric-grid"></div>
+      <article id="market-story" class="story-card panel"></article>
       <div class="dashboard-grid">
         <article class="panel span-7"><div class="section-heading"><div><p class="eyebrow">PARTICIPATION</p><h2>Moving-average breadth</h2></div><span class="muted">Equal-weight universe</span></div><div id="breadth-bars" class="breadth-bars"></div></article>
         <article class="panel span-5"><div class="section-heading"><div><p class="eyebrow">MARKET FLOW</p><h2>Advances vs declines</h2></div></div><div id="advance-chart" class="donut-layout"></div></article>
         <article class="panel span-12"><div class="section-heading"><div><p class="eyebrow">ROTATION</p><h2>Macro-sector heatmap</h2></div><a href="#sectors" class="text-link">Explore all levels →</a></div><div id="macro-heatmap" class="heatmap"></div></article>
+        <article class="panel span-12"><div class="section-heading"><div><p class="eyebrow">FOCUS NOW</p><h2>Top quality-ranked opportunities</h2></div><select id="focus-size" aria-label="Focus list size"><option>10</option><option>15</option><option>20</option></select></div><div id="focus-list" class="focus-grid"></div></article>
       </div>
     </section>
 
@@ -74,19 +78,25 @@
 
     <section id="leadership" class="view hidden">
       <div class="page-heading"><div><p class="eyebrow">STOCK LEADERSHIP</p><h1>Qualified opportunities,<br><span>with reasons.</span></h1></div><p>Transparent mechanical screening—not investment advice. Select a setup, search, sort, inspect, and export.</p></div>
-      <div class="toolbar panel">
+      <div class="toolbar panel scanner-toolbar">
         <div id="scanner-tabs" class="segmented"></div>
         <label class="search"><span>⌕</span><input id="stock-search" type="search" placeholder="Search symbol, company, sector…"></label>
         <select id="sector-filter" aria-label="Filter by sector"><option value="">All sectors</option></select>
         <button id="export-button" class="primary-button">Export CSV</button>
       </div>
-      <div class="table-shell panel"><div class="table-meta"><span id="table-count">0 stocks</span><span class="muted">Click a row for its qualification explanation</span></div><div class="table-scroll"><table><thead><tr><th data-sort="symbol">Symbol</th><th data-sort="close">Price</th><th data-sort="daily_change_percent">Day</th><th data-sort="momentum_score">Momentum</th><th data-sort="return_3_month_percent">3M</th><th data-sort="extension_atr_multiples">Extension</th><th data-sort="sector">Sector</th></tr></thead><tbody id="stock-table"></tbody></table></div></div>
+      <div class="table-shell panel"><div class="table-meta"><span id="table-count">0 stocks</span><div class="table-actions"><button id="copy-button" class="quiet-button">Copy TradingView</button><span class="muted">Click ticker for Ticker 360</span></div></div><div class="table-scroll"><table><thead><tr><th data-sort="symbol">Symbol</th><th data-sort="close">Price</th><th data-sort="daily_change_percent">Day</th><th data-sort="return_1_week_percent">1W</th><th data-sort="relative_strength_rating">RS</th><th data-sort="return_3_month_percent">3M</th><th data-sort="position_52_week_percent">52W range</th><th data-sort="opportunity_type">Type</th><th data-sort="sector">Sector</th></tr></thead><tbody id="stock-table"></tbody></table></div></div>
     </section>
 
     <section id="sectors" class="view hidden">
       <div class="page-heading"><div><p class="eyebrow">FULL NSE HIERARCHY</p><h1>From macro sectors<br><span>to basic industries.</span></h1></div><p>Explore participation at every classification level. Rankings are equal-weight to prevent a handful of large stocks from hiding weak breadth.</p></div>
       <div id="group-tabs" class="segmented large"></div>
+      <div class="table-shell panel xray-shell"><div class="table-meta"><strong>Market X-Ray</strong><span class="muted">Click any row to see its stocks</span></div><div class="table-scroll"><table class="xray-table"><thead><tr><th>Group</th><th>State</th><th>Breadth</th><th>&gt;50 DMA</th><th>&gt;200 DMA</th><th>Median 3M</th><th>Leaders</th><th>New Highs</th></tr></thead><tbody id="xray-table"></tbody></table></div></div>
       <div id="group-grid" class="group-grid"></div>
+    </section>
+
+    <section id="research" class="view hidden">
+      <div class="page-heading"><div><p class="eyebrow">YOUR RESEARCH DESK</p><h1>Watchlists and<br><span>dated notes.</span></h1></div><p>Saved only in this browser. Market data remains public; your notes are not uploaded to GitHub.</p></div>
+      <div class="research-grid"><article class="panel research-panel"><div class="section-heading"><div><p class="eyebrow">WATCHLIST</p><h2>Saved tickers</h2></div><button id="copy-watchlist" class="quiet-button">Copy TradingView</button></div><div id="watchlist"></div></article><article class="panel research-panel"><p class="eyebrow">NOTES</p><h2>Daily market journal</h2><textarea id="journal-note" rows="8" placeholder="Write your market observations…"></textarea><button id="save-note" class="primary-button">Save dated note</button><div id="notes-list"></div></article></div>
     </section>
 
     <section id="health" class="view hidden">
@@ -101,8 +111,9 @@
     </section>
   </main>
 
-  <dialog id="stock-dialog"><button id="dialog-close" class="dialog-close" aria-label="Close">×</button><div id="dialog-content"></div></dialog>
-  <footer><span>India Market Leadership & Breadth</span><span id="footer-meta">Rules — · Updated —</span></footer>
+  <dialog id="list-dialog"><button id="list-close" class="dialog-close" aria-label="Close">×</button><div id="list-content"></div></dialog>
+  <dialog id="stock-dialog" class="stock-dialog"><button id="dialog-close" class="dialog-close" aria-label="Close">×</button><div id="dialog-content"></div></dialog>
+  <footer><span>India Market Intelligence</span><span id="footer-meta">Rules — · Updated —</span></footer>
   <script src="assets/app.js" defer></script>
 </body>
 </html>

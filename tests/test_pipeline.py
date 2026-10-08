@@ -26,6 +26,15 @@ class PipelineTests(unittest.TestCase):
             dashboard = json.loads((test_root / "site/data/dashboard.json").read_text())
             history = json.loads((test_root / "site/data/history.json").read_text())
             self.assertTrue(dashboard["stocks"])
+            sample = dashboard["stocks"][0]
+            for field in (
+                "return_1_week_percent", "return_12_month_percent", "sma_65", "adr_percent",
+                "high_52_week", "low_52_week", "position_52_week_percent",
+                "relative_strength_rating", "opportunity_type",
+            ):
+                self.assertIn(field, sample)
+            self.assertTrue(1 <= sample["relative_strength_rating"] <= 99)
+            self.assertIn("above_sma_65_percent", dashboard["market"])
             self.assertEqual(len(dashboard["groups"]["macro_sectors"]), 12)
             self.assertFalse(dashboard["metadata"]["publishable"])
             self.assertEqual(history["method"], "current_universe_reconstructed")
@@ -49,3 +58,11 @@ class PipelineTests(unittest.TestCase):
         ]
         bars.append(PriceBar(partial, "AAA", 100, 101, 99, 100, 1000, 100000, "EQ"))
         self.assertEqual(_latest_complete_session(bars, expected_universe=3, minimum_coverage=0.9), complete)
+
+    def test_site_exposes_intelligence_workflow(self):
+        html = (self.root / "site/index.html").read_text(encoding="utf-8")
+        javascript = (self.root / "site/assets/app.js").read_text(encoding="utf-8")
+        for phrase in ("Market X-Ray", "Copy TradingView", "Daily market journal", "global-search"):
+            self.assertIn(phrase, html)
+        for phrase in ("relative_strength_rating", "near_sma_65", "Interactive price chart", "showList"):
+            self.assertIn(phrase, javascript)
