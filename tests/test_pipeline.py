@@ -67,5 +67,5 @@ class PipelineTests(unittest.TestCase):
         javascript = (self.root / "site/assets/app.js").read_text(encoding="utf-8")
         for phrase in ("Market X-Ray", "Copy TradingView", "Daily market journal", "global-search", "Thirteen precise scanners"):
             self.assertIn(phrase, html)
-        for phrase in ("relative_strength_rating", "near_sma_65", "Interactive price chart", "showList"):
+        for phrase in ("relative_strength_rating", "near_sma_65", "Interactive price chart", "showList", "crosshair-line"):
             self.assertIn(phrase, javascript)
